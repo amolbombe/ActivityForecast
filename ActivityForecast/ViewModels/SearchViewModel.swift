@@ -28,7 +28,7 @@ class SearchViewModel {
             cities = list
             
         } catch let error {
-            print(error)
+            // Show Error View
         }
     }
 }
