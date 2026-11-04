@@ -19,7 +19,6 @@ struct SearchView: View {
             }
             .navigationTitle("Cities")
             .navigationDestination(for: City.self) { city in
-//                WeatherView(weatherviewModel: WeatherViewModel(city: city))
             }
         }
         .searchable(text: $viewModel.searchText, prompt: "Search city")
