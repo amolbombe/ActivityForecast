@@ -41,8 +41,8 @@ class WeatherForecastViewModel {
             errorMessage = error.errorMessage
             screenState = .error
         } catch {
-            errorMessage = error.localizedDescription
-            screenState = .error
+            screenState = .loaded
+            print("\(error.localizedDescription)")
         }
     }
     
