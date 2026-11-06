@@ -31,7 +31,9 @@ class SearchViewModel {
             screenState = .loaded
             guard let list = cityList else { return }
             
-            cities = list
+            await MainActor.run {
+                cities = list
+            }
             
         } catch let error as NetworkError {
             errorMessage = error.errorMessage

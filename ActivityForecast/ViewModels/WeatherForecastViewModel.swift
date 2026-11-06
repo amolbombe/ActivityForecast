@@ -14,7 +14,7 @@ class WeatherForecastViewModel {
     let city: City
     var weatherForecast: WeatherData?
     var errorMessage = ""
-    var suitabilityEngine: ActivitySuitabilityProvider = DailyActivitySuitability()
+    var suitabilityProvider: ActivitySuitabilityProvider = DailyActivitySuitability()
     var activityForecast = [ActivityForecast]()
     var suggestedActivities = [SuggestedActivity]()
     var screenState: ScreenState = .loaded
@@ -24,6 +24,7 @@ class WeatherForecastViewModel {
         self.city = city
     }
     
+    @MainActor
     func fetchForecastData() async {
         do {
             screenState = .loading
@@ -32,7 +33,7 @@ class WeatherForecastViewModel {
             weatherForecast = forecast.toDomain()
             guard let weatherForecast else { return }
             for weather in weatherForecast.daily {
-                let activities = suitabilityEngine.getSuitability(dailyWeather: weather)
+                let activities = suitabilityProvider.getSuitability(dailyWeather: weather)
                 activityForecast.append(ActivityForecast(date: weather.date, activityScore: activities))
             }
             updateSuggestions()
