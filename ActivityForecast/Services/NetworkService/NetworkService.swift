@@ -21,7 +21,7 @@ class NetworkClient: NetworkService {
         
         do {
             return try JSONDecoder().decode(T.self, from: data)
-        } catch let error {
+        } catch {
             throw NetworkError.decodingError
         }
     }

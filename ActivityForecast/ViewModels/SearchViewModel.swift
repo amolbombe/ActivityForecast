@@ -12,23 +12,33 @@ import Observation
 class SearchViewModel {
     var cities: [City] = [City]()
     var searchText: String = ""
+    var errorMessage = ""
+    var screenState: ScreenState = .loaded
     
-    let geocodingService: GeocodingService 
+    let geocodingService: GeocodingServicing
     
-    init(geocodingService: GeocodingService = GeocodingService()) {
+    init(geocodingService: GeocodingServicing = GeocodingService()) {
         self.geocodingService = geocodingService
     }
     
-    func fetchSearchResults(string: String) async {
+    func fetchSearchResults() async {
+        let string = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+        if string.isEmpty { return }
+        screenState = .loading
+        try? await Task.sleep(for: .seconds(0.5))
         do {
             let cityList: [City]? = try await geocodingService.search(query: string)
-            
+            screenState = .loaded
             guard let list = cityList else { return }
             
             cities = list
             
-        } catch let error {
-            // Show Error View
+        } catch let error as NetworkError {
+            errorMessage = error.errorMessage
+            screenState = .error
+        } catch {
+            errorMessage = error.localizedDescription
+            screenState = .error
         }
     }
 }

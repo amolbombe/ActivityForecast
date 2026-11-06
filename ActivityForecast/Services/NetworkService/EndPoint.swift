@@ -6,11 +6,12 @@
 //
 
 import Foundation
+
 enum EndPoint {
     case search
     case forecast
     
-    var basrUrl: String {
+    var baseUrl: String {
         switch self {
         case .search:
             return "https://geocoding-api.open-meteo.com"

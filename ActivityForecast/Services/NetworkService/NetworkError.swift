@@ -12,4 +12,8 @@ enum NetworkError: Error {
     case invalidResponse(Int)
     case noData
     case decodingError
+    
+    var errorMessage: String {
+        "Something went wrong, please try again"
+    }
 }

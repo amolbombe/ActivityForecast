@@ -20,7 +20,7 @@ struct GeocodingService: GeocodingServicing {
     }
     
     func search(query: String) async throws -> [City] {
-        guard var components = URLComponents(string: endPoint.basrUrl + endPoint.path) else {
+        guard var components = URLComponents(string: endPoint.baseUrl + endPoint.path) else {
             throw NetworkError.invalidURL
         }
         
