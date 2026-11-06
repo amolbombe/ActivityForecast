@@ -14,33 +14,32 @@ protocol ActivitySuitability {
 /// Evaluate Suitability for Skiing Activity
 struct SkiingSuitability: ActivitySuitability {
     func evaluateSuitability(weather: Daily) -> ActivityScore {
-        var score = 70 // Base baseline
+        var score = 0
         
-        // 1. Temperature adjustments (Ideal is slightly below freezing)
+        if weather.windSpeed10mMax < 30 {
+            score += 20
+        }
+        
+        if weather.precipitationSum < 2.5 {
+            score += 15
+        }
+        
         if weather.temperature2mMax < 0 && weather.temperature2mMax > -10 {
-            score += 20 // Great snow-preserving cold
+            score += 30 // Great snow-preserving cold
         } else if weather.temperature2mMax >= 0 && weather.temperature2mMax < 5 {
-            score -= 10 // Borderline slushy
+            score += 20 // Borderline slushy
         } else if weather.temperature2mMax >= 5 {
-            score -= 40 // Rapid melting condition
+            score = 10 // Rapid melting condition
         } else if weather.temperature2mMax <= -15 {
-            score -= 20 // Dangerously bitter cold
+            score = 10 // Dangerously bitter cold
         }
         
-        // 2. Precipitation & Snowfall quality
         if weather.snowfallSum > 0.5 {
-            score += 15 // Fresh powder bonus
+            score += 35 // Fresh powder bonus
         } else if weather.precipitationSum > 0 && weather.snowfallSum == 0 {
-            score -= 45 // Rain on a ski slope is a dealbreaker
+            score = 10 // Rain on a ski slope is a dealbreaker
         }
-        
-        // 3. Wind Safety (Lift closure risks)
-        if weather.windSpeed10mMax > 40 {
-            score -= 50 // High risk of lift shutdowns
-        } else if weather.windSpeed10mMax > 20 {
-            score -= 15
-        }
-        
+                
         let finalScore = max(0, min(100, score))
         
         return ActivityScore(score: finalScore, activity: .skiing)
@@ -119,7 +118,7 @@ struct OutdoorSightseeingSuitability: ActivitySuitability {
 /// Evaluate Indoor Sightseeing Suitability for Activity
 struct IndoorSightseeingSuitability: ActivitySuitability {
     func evaluateSuitability(weather: Daily) -> ActivityScore {
-        var score = 50 // Standard base day
+        var score = 60 // Standard base day
         
         // 1. Push users inside if it is raining
         if weather.precipitationSum > 2.0 {
@@ -135,7 +134,7 @@ struct IndoorSightseeingSuitability: ActivitySuitability {
         
         // 3. Pull users outside (lower indoor score) if the weather is glorious
         if weather.cloudCoverMean < 30 && weather.temperature2mMax >= 18 && weather.temperature2mMax <= 25 && weather.precipitationSum == 0 {
-            score -= 30
+            score -= 20
         }
         
         let finalScore = max(0, min(100, score))

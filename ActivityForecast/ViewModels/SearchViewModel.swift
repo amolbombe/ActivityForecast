@@ -39,8 +39,7 @@ class SearchViewModel {
             errorMessage = error.errorMessage
             screenState = .error
         } catch {
-            errorMessage = error.localizedDescription
-            screenState = .error
+            print("\(error.localizedDescription)")
         }
     }
 }
