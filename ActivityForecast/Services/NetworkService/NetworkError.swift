@@ -14,6 +14,15 @@ enum NetworkError: Error {
     case decodingError
     
     var errorMessage: String {
-        "Something went wrong, please try again"
+        switch self {
+        case .invalidURL:
+            return "Invalid URL"
+        case .invalidResponse(let error):
+            return "Invalid response with error code \(error)"
+        case .noData:
+            return "Something went wrong, please try again"
+        case .decodingError:
+            return "Json decoding error"
+        }
     }
 }
